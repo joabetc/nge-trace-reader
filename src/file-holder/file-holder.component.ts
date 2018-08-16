@@ -21,17 +21,18 @@ import { OnInit, Component } from '@angular/core';
         border-color: #222;
       }
     </style>
-    <div id="holder" class="upload-drop-zone">
-      Drag your file here
+    <h4>Or drag and drop files below</h4>
+    <div class="upload-drop-zone" id="drop-zone" >
+      Just drag and drop files here
     </div>`
 })
 export class FileHolderComponent implements OnInit {
 
-  private _element: Element;
+  private _dropZone: Element;
 
   ngOnInit() {
-    this._element = <HTMLDivElement> document.querySelector('#holder');
-    this._element.addEventListener('drop', e => {
+    this._dropZone = <HTMLDivElement> document.querySelector('#drop-zone');
+    /*this._dropZone.addEventListener('drop', e => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -39,9 +40,27 @@ export class FileHolderComponent implements OnInit {
         console.log('File(s) you dragged here: ', f.path);
       }
     });
-    this._element.addEventListener('dragover', function (e) {
+    this._dropZone.addEventListener('dragover', function (e) {
       e.preventDefault();
       e.stopPropagation();
-    });
+    });*/
+  }
+
+  onDrop(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.startUpload((<any> event).dataTransfer.files);
+  }
+
+  onDragOver(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  startUpload(files: any) {
+    for (let file of files) {
+      console.log('File(s) you dragged here: ', file.path);
+    }
   }
 }
