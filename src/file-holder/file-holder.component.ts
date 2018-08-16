@@ -1,4 +1,4 @@
-import { OnInit, Component } from '@angular/core';
+import { OnInit, Component, HostListener, Host } from '@angular/core';
 
 @Component({
   selector: 'file-holder',
@@ -22,30 +22,19 @@ import { OnInit, Component } from '@angular/core';
       }
     </style>
     <h4>Or drag and drop files below</h4>
-    <div class="upload-drop-zone" id="drop-zone" >
+    <div class="upload-drop-zone" id="drop-zone" (drop)="onDrop($event)" (dragover)="onDragOver($event)">
       Just drag and drop files here
     </div>`
 })
 export class FileHolderComponent implements OnInit {
 
-  private _dropZone: Element;
+  private _dropZone: HTMLDivElement;
 
   ngOnInit() {
     this._dropZone = <HTMLDivElement> document.querySelector('#drop-zone');
-    /*this._dropZone.addEventListener('drop', e => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      for (let f of (<any> e).dataTransfer.files) {
-        console.log('File(s) you dragged here: ', f.path);
-      }
-    });
-    this._dropZone.addEventListener('dragover', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    });*/
   }
 
+  @HostListener('drop', ['$event'])
   onDrop(event: Event) {
     event.preventDefault();
     event.stopPropagation();
@@ -53,6 +42,7 @@ export class FileHolderComponent implements OnInit {
     this.startUpload((<any> event).dataTransfer.files);
   }
 
+  @HostListener('dragover', ['$event'])
   onDragOver(event: Event) {
     event.preventDefault();
     event.stopPropagation();
